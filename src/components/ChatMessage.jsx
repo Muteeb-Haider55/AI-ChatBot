@@ -1,16 +1,30 @@
 import ChatbotIcon from "./chatboticon";
 
-const ChatMessage = ({ chat }) => {
-  return (
-    !chat.hideInChat && (
-      <div
-        className={`message ${chat.role === "model" ? "bot" : "user"}-message`}
-      >
-        {chat.role === "model" && <ChatbotIcon />}
+// Helper to format text
+const formatTextWithBold = (text) => {
+  return text
+    .replace(/\*\*\*(.+?)\*\*\*/g, "<strong>$1</strong>")
+    .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
+};
 
-        <p className="message-text">{chat.text}</p>
-      </div>
-    )
+const ChatMessage = ({ chat }) => {
+  if (chat.hideInChat) return null;
+
+  const isBot = chat.role === "model";
+  const formattedText = isBot ? formatTextWithBold(chat.text) : chat.text;
+
+  return (
+    <div className={`message ${isBot ? "bot" : "user"}-message`}>
+      {isBot && <ChatbotIcon />}
+      {isBot ? (
+        <p
+          className="message-text"
+          dangerouslySetInnerHTML={{ __html: formattedText }}
+        />
+      ) : (
+        <p className="message-text">{formattedText}</p>
+      )}
+    </div>
   );
 };
 

@@ -5,17 +5,19 @@ import ChatMessage from "./components/ChatMessage";
 import { companyinfo } from "./companyinfo";
 
 const App = () => {
-  const [chatHistory, setChatHistory] = useState([
-    {
-      hideInChat: true,
-      role: "model",
-      text: companyinfo,
-    },
-  ]);
+  // Initialize chat history with data from localStorage
+  const [chatHistory, setChatHistory] = useState(() => {
+    const savedChat = localStorage.getItem("chatHistory");
+    return savedChat
+      ? JSON.parse(savedChat)
+      : [{ hideInChat: true, role: "model", text: companyinfo }];
+  });
+
   const [showChatBot, setShowChatBot] = useState(false);
-  const [isMinimized, setIsMinimized] = useState(false); // New state for minimized mode
+  const [isMinimized, setIsMinimized] = useState(false); // Minimized state
   const chatBodyRef = useRef();
 
+  // Function to generate bot's response
   const generateBotResponse = async (history) => {
     // Format chat history for API request
     history = history.map(({ role, text }) => ({ role, parts: [{ text }] }));
@@ -27,7 +29,6 @@ const App = () => {
     };
 
     try {
-      // Make the API call to get the bot's response
       const response = await fetch(
         import.meta.env.VITE_API_URL,
         requestOptions
@@ -38,10 +39,8 @@ const App = () => {
         throw new Error(data.error?.message || "Something went wrong!");
       }
 
-      // Extract the bot's response from the API data
       const botResponse = data.candidates[0].content.parts[0].text;
 
-      // Update chat history: Remove "Thinking ..." and add the bot's response
       setChatHistory((prevHistory) => [
         ...prevHistory.filter((msg) => msg.text !== "Thinking ... "),
         { role: "model", text: botResponse },
@@ -58,8 +57,8 @@ const App = () => {
     }
   };
 
+  // Auto scroll when chat history updates
   useEffect(() => {
-    // auto scroll whenever chat history update
     if (chatBodyRef.current) {
       chatBodyRef.current.scrollTo({
         top: chatBodyRef.current.scrollHeight,
@@ -68,6 +67,12 @@ const App = () => {
     }
   }, [chatHistory]);
 
+  // Store chat history in localStorage when it changes
+  useEffect(() => {
+    localStorage.setItem("chatHistory", JSON.stringify(chatHistory));
+  }, [chatHistory]);
+
+  // Toggle minimize state
   const toggleMinimize = () => {
     setIsMinimized(!isMinimized);
   };
@@ -85,7 +90,7 @@ const App = () => {
         <span className="material-symbols-rounded">close</span>
       </button>
       <div className={`chatbot-popup ${isMinimized ? "minimized" : ""}`}>
-        {/* chatbot header */}
+        {/* Chatbot header */}
         <div className="chat-header">
           <div className="header-info">
             <ChatbotIcon />
@@ -106,7 +111,7 @@ const App = () => {
               <div className="message bot-message">
                 <ChatbotIcon />
                 <p className="message-text">
-                  Hey There how can
+                  Hey There how can I
                   <br /> help you today 👏
                 </p>
               </div>
