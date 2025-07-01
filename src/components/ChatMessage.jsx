@@ -1,4 +1,4 @@
-import ChatbotIcon from "./chatboticon";
+import ChatbotIcon from "./ChatbotIcon";
 
 // Helper to format text
 const formatTextWithBold = (text) => {
