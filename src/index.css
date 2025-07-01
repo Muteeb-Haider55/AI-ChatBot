@@ -21,7 +21,7 @@ body {
   ); /* Soft light green background */
 
   /* 🔽 Add background image here */
-  background-image: url("./assets/bg.png");
+  background-image: url("./assets/bg.jpg");
   background-size: cover; /* Makes sure image covers entire area */
   background-repeat: no-repeat; /* Prevents repetition */
   background-position: center; /* Centers the image */
