@@ -351,10 +351,14 @@ body {
 /* Small screens: Phones (480px and below) */
 @media (max-width: 480px) {
   .chatbot-popup {
-    width: 95%;
-    right: 2.5%;
-    bottom: 70px;
-    max-height: 85vh;
+    width: 100%;
+    right: 0;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    height: 100vh;
+    max-height: 100vh;
+    border-radius: 0;
   }
 
   .chat-body {
