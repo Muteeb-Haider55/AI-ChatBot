@@ -13,7 +13,7 @@ const App = () => {
       : [{ hideInChat: true, role: "model", text: companyinfo }];
   });
 
-  const [showChatBot, setShowChatBot] = useState(false);
+  const [showChatBot, setShowChatBot] = useState(true);
   const [isMinimized, setIsMinimized] = useState(false); // Minimized state
   const chatBodyRef = useRef();
 
